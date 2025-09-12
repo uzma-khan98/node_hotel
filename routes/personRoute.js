@@ -31,6 +31,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({ err: "Internal server error" })
   }
 })
+
 //* GET route to fetch a specific person by ID
 router.get("/:id", async (req, res) => {
   try {

@@ -4,8 +4,8 @@ import mongoose from 'mongoose';
 
 //* Define the mongoDB connection URL
 // const mongoDB_URL = 'mongodb://localhost:27017/hotels';
-// const mongoURL = process.env.MONGODB_UR';
-const mongoURL = process.env.MONGODB_URL || 'mongodb://localhost:27017/hotels';
+// const mongoURL = process.env.MONGODB_URL;
+const mongoURL = process.env.MONGODB_URL || 'MONGODB_URL_LOCAL';
 
 //* set up mongoDB connection
 mongoose.connect(mongoURL, {
