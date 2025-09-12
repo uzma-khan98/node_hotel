@@ -1,8 +1,10 @@
+import 'dotenv/config';
 import express from "express";
 import db from "./db.js";
 
 
 import bodyParser from "body-parser";
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
