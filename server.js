@@ -42,7 +42,8 @@ app.get("/", (req, res) => {
 //     }
 //     res.send(customized_idli)
 // })
-
+//* This is the menu-card for our server(waiter) in the form of routes(paths)
+//* No other route the server can display.It will take request according to this menu-card and sends response
 
 
 //? POST route(endpoint) to save Person-data
@@ -83,5 +84,4 @@ app.listen(3000, () => {
   console.log("Server is listening on port 3000");
 });
 
-// This is the menu-card for our server(waiter) in the form of routes(paths)
-// No other route the server can display.It will take request according to this menu-card and sends response
+
