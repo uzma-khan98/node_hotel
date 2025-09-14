@@ -12,6 +12,20 @@ const app = express();
 // parse application/json
 app.use(bodyParser.json()); //* req.body
 
+// * Middleware Function
+const logRequest = (req, res, next) => {
+  console.log(`[${new Date().toISOString()}] Request made to: ${req.originalUrl}`);
+  next(); //move on to the next phase
+}
+
+// * logRequest  generally applied on all routes
+app.use(logRequest);
+
+// * logRequest on specific route
+app.get("/", logRequest,(req, res) => {
+  res.send("Welcome to Our Hotel");
+});
+
 //* import the router files
 import personRoutes from "./routes/personRoute.js";
 import menuRoutes from "./routes/menuRoute.js";
@@ -19,7 +33,7 @@ import menuRoutes from "./routes/menuRoute.js";
 app.use("/persons", personRoutes);
 app.use("/menuItems", menuRoutes);
 
-// Add debug middleware (before your routes to see all incoming requests)
+// Add debug middleware (before your routes) to see all incoming requests
 // app.use((req, res, next) => {
 //   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
 //   next();
