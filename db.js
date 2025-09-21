@@ -1,6 +1,5 @@
-import 'dotenv/config';
-import mongoose from 'mongoose';
-
+import "dotenv/config";
+import mongoose from "mongoose";
 
 //* Define the mongoDB connection URL
 // * local
@@ -10,8 +9,8 @@ const mongoURL = process.env.MONGODB_URL_LOCAL;
 
 //* set up mongoDB connection
 mongoose.connect(mongoURL, {
-    useNewUrlParser: true,
-    useUnifiedTopology:true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
 //* get the default connection,
@@ -19,17 +18,16 @@ mongoose.connect(mongoURL, {
 const db = mongoose.connection;
 
 //* define event listeners for database connection
-db.on('connected', () => {
-    console.log('Connected to MongoDB server...!');
+db.on("connected", () => {
+  console.log("Connected to MongoDB server/local...!");
 });
 
-db.on('err', () => {
-    console.log('MongoDB Connection Error :', err);
+db.on("err", () => {
+  console.log("MongoDB Connection Error :", err);
 });
-db.on('disconnected', () => {
-    console.log('Connecton break...');
-})
+db.on("disconnected", () => {
+  console.log("Connecton break...");
+});
 
 //* Export the database connection
 export default db;
-

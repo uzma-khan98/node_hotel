@@ -1,5 +1,6 @@
 import express from "express";
 import Persons from "../models/Person.js";
+import passport from "../auth.js";
 const router = express.Router();
 
 // ? With Async-Await - try-catch block
@@ -16,7 +17,7 @@ router.post("/", async (req, res) => {
     res.status(200).json(savedPerson);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ err: "Internal server error" })
+    res.status(500).json({ err: "Internal server error" });
   }
 });
 
@@ -28,9 +29,9 @@ router.get("/", async (req, res) => {
     res.status(200).json(persons);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ err: "Internal server error" })
+    res.status(500).json({ err: "Internal server error" });
   }
-})
+});
 
 //* GET route to fetch a specific person by ID
 router.get("/:id", async (req, res) => {
@@ -49,15 +50,20 @@ router.get("/:id", async (req, res) => {
 // * Using query parameters for nested paths in URL
 //* GET route to fetch a specific person by work type
 // ? make the work type route more specific:
-router.get('/work/:workType', async (req, res) => {
+router.get("/work/:workType", async (req, res) => {
   try {
     const workType = req.params.workType;
-    if (workType == 'chef' || workType == 'kitchen-helper' || workType == 'waiter' || workType == 'manager') {
+    if (
+      workType == "chef" ||
+      workType == "kitchen-helper" ||
+      workType == "waiter" ||
+      workType == "manager"
+    ) {
       const response = await Persons.find({ work: workType });
       console.log("Response Fetched:", response);
       res.status(200).json(response);
     } else {
-      res.json({ err: "work type not defined" })
+      res.json({ err: "work type not defined" });
     }
   } catch (err) {
     console.log(err);
@@ -66,15 +72,19 @@ router.get('/work/:workType', async (req, res) => {
 });
 
 // ? UPDATE data
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const personId = req.params.id; //extract the id from URL parameter
-    const updatedPersonData = req.body;  //updated data for the person
+    const updatedPersonData = req.body; //updated data for the person
 
-    const response = await Persons.findByIdAndUpdate(personId, updatedPersonData, {
-      new: true,   //return the updated document
-      runValidators: true,   //run mongoose validation
-    });
+    const response = await Persons.findByIdAndUpdate(
+      personId,
+      updatedPersonData,
+      {
+        new: true, //return the updated document
+        runValidators: true, //run mongoose validation
+      }
+    );
 
     if (!response) {
       return res.status(404).json({ error: "Person not found" });
@@ -85,11 +95,10 @@ router.put('/:id', async (req, res) => {
     console.log(error);
     res.status(500).json({ error: "Internal server error" });
   }
- 
 });
 
 // ? DELETE Data
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const personId = req.params.id; //extract the id from URL parameter
     // * assuming you have a person model
@@ -107,5 +116,3 @@ router.delete('/:id', async (req, res) => {
 });
 
 export default router;
-
-

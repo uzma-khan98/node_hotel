@@ -1,9 +1,9 @@
-import 'dotenv/config';
 import express from "express";
 import db from "./db.js";
-
-
 import bodyParser from "body-parser";
+import "dotenv/config";
+import passport from "./auth.js";
+
 const PORT = process.env.PORT || 3000;
 
 const app = express();
@@ -11,27 +11,31 @@ const app = express();
 //* middleware
 // parse application/json
 app.use(bodyParser.json()); //* req.body
+app.use(passport.initialize()); // Initialize passport FIRST
+const localAuthMiddleware = passport.authenticate("local", { session: false });
 
-// * Middleware Function
+// *LogRequest Middleware Function
 const logRequest = (req, res, next) => {
-  console.log(`[${new Date().toISOString()}] Request made to: ${req.originalUrl}`);
+  console.log(
+    `[${new Date().toLocaleString()}] Request made to: ${req.originalUrl}`
+  );
   next(); //move on to the next phase
-}
+};
 
 // * logRequest  generally applied on all routes
 app.use(logRequest);
 
 // * logRequest on specific route
-app.get("/", logRequest,(req, res) => {
-  res.send("Welcome to Our Hotel");
-});
+// app.get("/", logRequest,(req, res) => {
+//   res.send("Welcome to Our Hotel");
+// });   //take this route once
 
 //* import the router files
 import personRoutes from "./routes/personRoute.js";
 import menuRoutes from "./routes/menuRoute.js";
 //* use the router
-app.use("/persons", personRoutes);
-app.use("/menuItems", menuRoutes);
+app.use("/persons", localAuthMiddleware, personRoutes);
+app.use("/menuitems", menuRoutes);
 
 // Add debug middleware (before your routes) to see all incoming requests
 // app.use((req, res, next) => {
@@ -41,7 +45,7 @@ app.use("/menuItems", menuRoutes);
 
 // Routes
 app.get("/", (req, res) => {
-  res.send("Welcome to Our Hotel");
+  res.send("Welcome to Our Hotel..welcome welcome!");
 });
 // app.get("/chicken", (req, res) => {
 //   res.send("I would like to serve you chicken.");
@@ -56,12 +60,12 @@ app.get("/", (req, res) => {
 //     }
 //     res.send(customized_idli)
 // })
+
 //* This is the menu-card for our server(waiter) in the form of routes(paths)
 //* No other route the server can display.It will take request according to this menu-card and sends response
 
-
 //? POST route(endpoint) to save Person-data
-// ? Using Call-Back Method - Deprecated
+// ? Using Call-Back Method - Deprecated   - DAY-
 // app.post("/person", (req, res) => {
 //   const data = req.body; //Assuming the request body contains the person-data
 
@@ -91,11 +95,9 @@ app.get("/", (req, res) => {
 // Add this to catch all undefined routes
 // 404 CATCH-ALL ROUTE - MUST BE LAST!
 app.use((req, res) => {
-  res.status(404).send("Route not found");
+  res.status(404).send("Route not found yet");
 });
 
 app.listen(3000, () => {
   console.log("Server is listening on port 3000");
 });
-
-
