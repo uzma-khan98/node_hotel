@@ -1,6 +1,6 @@
 import express from "express";
 import db from "./db.js";
-import bodyParser from "body-parser";
+import bodyParser from "body-parser";   // till express 4.16.0
 import "dotenv/config";
 import passport from "./auth.js";
 
