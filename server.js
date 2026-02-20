@@ -1,6 +1,6 @@
 import express from "express";
 import db from "./db.js";
-import bodyParser from "body-parser";   // till express 4.16.0
+import bodyParser from "body-parser"; // till express 4.16.0
 import "dotenv/config";
 import passport from "./auth.js";
 
@@ -22,7 +22,7 @@ const logRequest = (req, res, next) => {
   next(); //move on to the next phase
 };
 
-// * logRequest  generally applied on all routes
+// * logRequest generally applied on all routes
 app.use(logRequest);
 
 // * logRequest on specific route
@@ -98,6 +98,6 @@ app.use((req, res) => {
   res.status(404).send("Route not found yet");
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
 });
