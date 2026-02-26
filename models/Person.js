@@ -9,6 +9,10 @@ const personSchema = new mongoose.Schema({
   },
   age: {
     type: Number,
+    required: true,
+  },
+  gender: {
+    type: String,
   },
   work: {
     type: String,
