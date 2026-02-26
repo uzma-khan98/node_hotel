@@ -1,15 +1,17 @@
 import express from "express";
-import Persons from "../models/Person.js";
+import Person from "../models/Person.js";
 import passport from "../auth.js";
 const router = express.Router();
 
+
+// * save the new Person to the database
 // ? With Async-Await - try-catch block
 router.post("/", async (req, res) => {
   try {
     const data = req.body; //Assuming the request body contains the person-data
 
     //* create a new person-document using Mongoose Schema
-    const newPerson = new Persons(data);
+    const newPerson = new Person(data);
 
     // * save the new Person to the database
     const savedPerson = await newPerson.save();
@@ -24,7 +26,7 @@ router.post("/", async (req, res) => {
 // * GET method to get all persons
 router.get("/", async (req, res) => {
   try {
-    const persons = await Persons.find();
+    const persons = await Person.find();
     console.log("Data fetched:", persons);
     res.status(200).json(persons);
   } catch (err) {
@@ -50,16 +52,17 @@ router.get("/:id", async (req, res) => {
 // * Using query parameters for nested paths in URL
 //* GET route to fetch a specific person by work type
 // ? make the work type route more specific:
-router.get("/work/:workType", async (req, res) => {
+router.get("/:workType", async (req, res) => {
   try {
-    const workType = req.params.workType;
+    const workType = req.params.workType; //Extract the work-type url parameter
+    //apply validation
     if (
       workType == "chef" ||
       workType == "kitchen-helper" ||
       workType == "waiter" ||
       workType == "manager"
     ) {
-      const response = await Persons.find({ work: workType });
+      const response = await Person.find({ work: workType });
       console.log("Response Fetched:", response);
       res.status(200).json(response);
     } else {
@@ -77,7 +80,7 @@ router.put("/:id", async (req, res) => {
     const personId = req.params.id; //extract the id from URL parameter
     const updatedPersonData = req.body; //updated data for the person
 
-    const response = await Persons.findByIdAndUpdate(
+    const response = await Person.findByIdAndUpdate(
       personId,
       updatedPersonData,
       {
@@ -102,7 +105,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const personId = req.params.id; //extract the id from URL parameter
     // * assuming you have a person model
-    const response = await Persons.findByIdAndDelete(personId);
+    const response = await Person.findByIdAndDelete(personId);
 
     if (!response) {
       return res.status(404).json({ error: "Person not found" });

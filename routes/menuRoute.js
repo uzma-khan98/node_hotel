@@ -8,10 +8,10 @@ router.post("/", async (req, res) => {
   try {
     const data = req.body; //Assuming the request body contains the person-data
 
-    //* create a new person-document using Mongoose Schema
-    const MenuItems = new MenuItems(data);
+    //* create a new menuitem-document using Mongoose Schema
+    const newMenu = new MenuItems(data);
 
-    // * save the new Person to the database
+    //* save the new menuitem to the database
     const savedMenuItem = await MenuItems.save();
     console.log("Data saved:", savedMenuItem);
     res.status(200).json(savedMenuItem) ;
@@ -64,5 +64,5 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-// changes to test
+
 export default router;
