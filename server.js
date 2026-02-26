@@ -4,8 +4,6 @@ import bodyParser from "body-parser"; // till express 4.16.0
 import "dotenv/config";
 import passport from "./auth.js";
 
-const PORT = process.env.PORT || 3000;
-
 const app = express();
 
 //* middleware
@@ -14,7 +12,7 @@ app.use(bodyParser.json()); //* req.body
 app.use(passport.initialize()); // Initialize passport FIRST
 const localAuthMiddleware = passport.authenticate("local", { session: false });
 
-// *LogRequest Middleware Function
+//* LogRequest Middleware Function
 const logRequest = (req, res, next) => {
   console.log(
     `[${new Date().toLocaleString()}] Request made to: ${req.originalUrl}`
@@ -34,16 +32,16 @@ app.use(logRequest);
 import personRoutes from "./routes/personRoute.js";
 import menuRoutes from "./routes/menuRoute.js";
 //* use the router
-app.use("/persons", localAuthMiddleware, personRoutes);
+app.use("/persons", personRoutes);
 app.use("/menuitems", menuRoutes);
 
 // Add debug middleware (before your routes) to see all incoming requests
-// app.use((req, res, next) => {
-//   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-//   next();
-// });
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
 
-// Routes
+//* Routes
 app.get("/", (req, res) => {
   res.send("Welcome to Our Hotel..welcome welcome!");
 });
@@ -65,14 +63,14 @@ app.get("/", (req, res) => {
 //* No other route the server can display.It will take request according to this menu-card and sends response
 
 //? POST route(endpoint) to save Person-data
-// ? Using Call-Back Method - Deprecated   - DAY-
-// app.post("/person", (req, res) => {
+//? Define the POST-method in personRoute.js file
+//  app.post("/person", (req, res) => {
 //   const data = req.body; //Assuming the request body contains the person-data
 
-// create a new person-document using Mongoose Schema
-//   const newPerson = new Person(data);
+// create a new person-document(newPerson)-object using Mongoose Schema
+// const newPerson = new Person(data);
 
-// * Don't write all these lines,instead write simply data inside parenthesis as Person's parameter
+//* Don't write all these lines,instead write simply data inside parenthesis as Person's parameter
 // newPerson.name = data.name;
 // newPerson.age = data.age;
 // newPerson.work = data.work;
@@ -81,15 +79,16 @@ app.get("/", (req, res) => {
 // newPerson.salary = data.salary;
 
 // * save the new Person to the database
-//   newPerson.save((err, savedPerson) => {
-//     if (err) {
-//       console.log("Error saving Person-data:", err);
-//       res.status(500).json({ err: "InternalServer Error" });
-//     } else {
-//       console.log("Data saved successfully");
-//       res.status(200).json(savedPerson);
-//     }
-//   });
+//? Using Call-Back Method - Deprecated   - DAY-05
+// newPerson.save((err, savedPerson) => {
+//   if (err) {
+//     console.log("Error saving Person-data:", err);
+//     res.status(500).json({ err: "InternalServer Error" });
+//   } else {
+//     console.log("Data saved successfully");
+//     res.status(200).json(savedPerson);
+//   }
+// });
 // });
 
 // Add this to catch all undefined routes
@@ -98,6 +97,8 @@ app.use((req, res) => {
   res.status(404).send("Route not found yet");
 });
 
+//* server configuration
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
 });
