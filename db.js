@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 
 //* Define the mongoDB connection URL
 // * local
-const mongoURL = process.env.MONGODB_URL_LOCAL;
+// const mongoURL = process.env.MONGODB_URL_LOCAL;
 // * connection on Atlas || local
-// const mongoURL = process.env.MONGODB_URL || 'MONGODB_URL_LOCAL';
+const mongoURL = process.env.MONGODB_URL || 'MONGODB_URL_LOCAL';
 
 //* set up mongoDB connection
 mongoose.connect(mongoURL, {
