@@ -6,6 +6,12 @@ import passport from "./auth.js";
 
 const app = express();
 
+// Add debug middleware (before your routes) to see all incoming requests
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
+
 //* middleware
 // parse application/json
 app.use(bodyParser.json()); //* req.body
@@ -35,16 +41,10 @@ import menuRoutes from "./routes/menuRoute.js";
 app.use("/persons", personRoutes);
 app.use("/menuitems", menuRoutes);
 
-// Add debug middleware (before your routes) to see all incoming requests
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-  next();
-});
-
 //* Routes
-app.get("/", (req, res) => {
-  res.send("Welcome to Our Hotel..welcome welcome!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Welcome to Our Hotel..welcome welcome!");
+// });
 // app.get("/chicken", (req, res) => {
 //   res.send("I would like to serve you chicken.");
 // });
@@ -100,5 +100,5 @@ app.use((req, res) => {
 //* server configuration
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log("Server is listening on port 3000");
+  console.log(`Server is listening on port ${PORT}`);
 });

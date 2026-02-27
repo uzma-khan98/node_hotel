@@ -3,7 +3,6 @@ import Person from "../models/Person.js";
 import passport from "../auth.js";
 const router = express.Router();
 
-
 // * save the new Person to the database
 // ? With Async-Await - try-catch block
 router.post("/", async (req, res) => {
@@ -38,7 +37,7 @@ router.get("/", async (req, res) => {
 //* GET route to fetch a specific person by ID
 router.get("/:id", async (req, res) => {
   try {
-    const person = await Persons.findById(req.params.id);
+    const person = await Person.findById(req.params.id);
     if (!person) {
       return res.status(404).json({ error: "Person not found" });
     }
@@ -52,7 +51,7 @@ router.get("/:id", async (req, res) => {
 // * Using query parameters for nested paths in URL
 //* GET route to fetch a specific person by work type
 // ? make the work type route more specific:
-router.get("/:workType", async (req, res) => {
+router.get("/work/:workType", async (req, res) => {
   try {
     const workType = req.params.workType; //Extract the work-type url parameter
     //apply validation
