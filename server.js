@@ -38,13 +38,13 @@ app.use(logRequest);
 import personRoutes from "./routes/personRoute.js";
 import menuRoutes from "./routes/menuRoute.js";
 //* use the router
-app.use("/persons", personRoutes);
+app.use("/persons", localAuthMiddleware, personRoutes);
 app.use("/menuitems", menuRoutes);
 
 //* Routes
-// app.get("/", (req, res) => {
-//   res.send("Welcome to Our Hotel..welcome welcome!");
-// });
+app.get("/", (req, res) => {
+  res.send("Welcome to Our Hotel..welcome welcome!");
+});
 // app.get("/chicken", (req, res) => {
 //   res.send("I would like to serve you chicken.");
 // });
@@ -99,6 +99,6 @@ app.use((req, res) => {
 
 //* server configuration
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(3000, () => {
   console.log(`Server is listening on port ${PORT}`);
 });

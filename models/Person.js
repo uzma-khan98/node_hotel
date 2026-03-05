@@ -46,14 +46,16 @@ const personSchema = new mongoose.Schema({
   },
 });
 
+//* We do password modification, just before saving it to DB-means do hashing with bcrypt
 personSchema.pre("save", async function (next) {
-  const person = this;
+  const person = this;  //this represents here,the person's record
 
-  // Hash the password only if it has been modified or is new
-  if (!person.isModified("password")) return next();
+  // Hash the password only if it has not been modified (means new record) OR the old one that is already hashed(modified)
+  if (!person.isModified("password")) return next(); //then no need of hashing so move on to next
   try {
     // hashed password generation
-    const salt = await bcrypt.genSalt(10);
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
 
     // hash password
     const hashedPassword = await bcrypt.hash(person.password, salt);
@@ -80,6 +82,10 @@ personSchema.methods.comparePassword = async function (enteredPassword) {
 // when login again----> wrong password---> agarwal,   we think that compare function converts the first random password to plain text password and then matches both. This is actually not the case
 // It actuially extracts salt from the first random password(FRP)
 // salt +agerwal -----> hash---->lkdjjshuhsieioihasdbsdf(sth different)
+// actual password hashed === wrong password-hashed (it checks)
+// hgdksjshasjjasdhsdufh === lkdjjshuhsieioihasdbsdf(not the same) so not allowed to login
+
+// The compare function extracts the salt from storedHashedPassword and uses it to hash the entered password.It then compares the resulted hash with the stored one; if they match, it indicates that the entered password is correct.
 
 // * create Person model
 const Person = mongoose.model("Person", personSchema);
