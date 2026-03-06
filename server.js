@@ -38,7 +38,7 @@ app.use(logRequest);
 import personRoutes from "./routes/personRoute.js";
 import menuRoutes from "./routes/menuRoute.js";
 //* use the router
-app.use("/persons", localAuthMiddleware, personRoutes);
+app.use("/persons", personRoutes);
 app.use("/menuitems", menuRoutes);
 
 //* Routes
